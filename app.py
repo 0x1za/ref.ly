@@ -143,7 +143,6 @@ def create_referral():
                                 + "`"
                             )
                             message = "DuplicateRecord"
-                        pass
                     else:
                         # Log error if the user is not found or invitee user already exists.
                         if refer is None:
@@ -154,10 +153,8 @@ def create_referral():
                             errors.append(
                                 "User with email " + str(refer) + " already exists."
                             )
-                    pass
                 else:
                     if not valid_emails[0]:
-                        print(valid_emails[0])
                         errors.append(
                             "invitee_email: "
                             + str(invitee_email)
@@ -172,7 +169,6 @@ def create_referral():
                     message = "ValidationError"
             else:
                 errors += ["You cannot send a referral to yourself."]
-
             status = 1
         except KeyError as e:
             errors.append("A required key " + str(e) + " was not provided.")
