@@ -145,10 +145,15 @@ def create_referral():
                             message = "DuplicateRecord"
                         pass
                     else:
-                        # Log error if the user is not found.
-                        errors.append(
-                            "User with email " + str(refer) + " does not exist."
-                        )
+                        # Log error if the user is not found or invitee user already exists.
+                        if refer is None:
+                            errors.append(
+                                "User with email " + str(refer) + " does not exist."
+                            )
+                        elif invitee == 1:
+                            errors.append(
+                                "User with email " + str(refer) + " already exists."
+                            )
                     pass
                 else:
                     if not valid_emails[0]:
