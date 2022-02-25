@@ -6,7 +6,7 @@
   </a>
 </p>
 
-> rf.ly is a referal service for Amitree.
+> rf.ly is a referral & rewards management service for Amitree.
 
 ### 🏠 [Homepage](rf.ly)
 
