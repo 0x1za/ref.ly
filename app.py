@@ -117,9 +117,8 @@ def create_referral():
                 if all(valid_emails):
                     # Get referer id.
                     refer = User.query.filter_by(email=referer_email).first()
-                    if refer is not None:
-                        # TODO (0x1za): Check if user exists, invitee
-                        # If referer exists, we can proceed.
+                    invitee = User.query.filter_by(email=invitee_email).count()
+                    if refer is not None and invitee != 1:
                         refer_exists = Referral.query.filter_by(
                             referer_id=refer.id, email=invitee_email
                         ).count()
