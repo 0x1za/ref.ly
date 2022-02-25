@@ -8,6 +8,7 @@ flask-sqlalchemy = "*"
 pytest = "*"
 flake8 = "*"
 coverage = "*"
+flask-migrate = "*"
 
 [dev-packages]
 

@@ -1,14 +1,10 @@
 import re
-import secrets
 from typing import Tuple
 
-from flask import Flask, request
-from flask_sqlalchemy import SQLAlchemy
+from flask import request
 from sqlalchemy import exc
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///test.db"
-db = SQLAlchemy(app)
+from refs import Referral, User, app, db
 
 
 # Utils
@@ -19,30 +15,6 @@ def validate_email(email):
 
     else:
         return False
-
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    balance = db.Column(db.Integer, default=0, nullable=False)
-
-    def __repr__(self):
-        return "<User %r>" % self.username
-
-
-class Referral(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), nullable=False)
-    referer_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    referer = db.relationship("User", backref=db.backref("users", lazy=True))
-    referral_code = db.Column(
-        db.String(60), unique=True, nullable=False, default=secrets.token_urlsafe(8)
-    )
-    joined = db.Column(db.Boolean, default=False)
-
-    def __repr__(self):
-        return "<Referral %r>" % self.referral_code
 
 
 @app.route("/v1/create/user", methods=["POST"])
