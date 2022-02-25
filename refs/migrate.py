@@ -1,4 +1,4 @@
-from app import Referral, User, db
+from app.app import Referral, User, db
 
 db.session.query(User).delete()
 db.session.query(Referral).delete()
