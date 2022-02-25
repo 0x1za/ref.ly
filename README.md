@@ -1,5 +1,6 @@
 <h1 align="center">ref.ly 🔗</h1>
 <p>
+  <img alt="rf.ly: build" src="https://github.com/0x1za/ref.ly/actions/workflows/python-app.yml/badge.svg" />
   <img alt="Version" src="https://img.shields.io/badge/version-v1-blue.svg?cacheSeconds=2592000" />
   <a href="#" target="_blank">
     <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
