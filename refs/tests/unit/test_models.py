@@ -1,7 +1,7 @@
 """
 Unit tests for models in refs.
 """
-from refs import User
+from refs.models import User
 
 
 def test_new_user():

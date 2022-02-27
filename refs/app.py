@@ -2,9 +2,10 @@ import re
 from typing import Tuple
 
 from flask import request
+from models import Referral, User
 from sqlalchemy import exc
 
-from refs import Referral, User, app, db
+from refs import app, db
 
 
 # Utils
