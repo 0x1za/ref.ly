@@ -1,7 +1,7 @@
 """
 Unit tests for models in refs.
 """
-from refs.models import User
+from refs.models import Referral, User
 
 
 def test_new_user():
@@ -19,3 +19,13 @@ def test_new_user_with_fixture(new_user):
     """
     assert new_user.email == "annedoe@example.com"
     assert new_user.username == "annedoe"
+    assert new_user.__repr__() == "<User 'annedoe'>"
+
+
+def test_new_referral(new_user):
+    """
+    Create new referral.
+    """
+    referral = Referral(email="x123@example.com", referer=new_user)
+    assert referral.email == "x123@example.com"
+    assert referral.__repr__() == "<Referral 'x123@example.com/annedoe@example.com'>"

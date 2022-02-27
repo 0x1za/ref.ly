@@ -9,6 +9,7 @@ pytest = "*"
 flake8 = "*"
 coverage = "*"
 flask-migrate = "*"
+pytest-cov = "*"
 
 [dev-packages]
 

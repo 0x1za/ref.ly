@@ -30,4 +30,4 @@ class Referral(db.Model):
     joined = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-        return "<Referral %r>" % self.referral_code
+        return "<Referral %r>" % str(self.email + "/" + self.referer.email)
