@@ -1,7 +1,7 @@
 import pytest
 
 from refs import app
-from refs.models import User, db
+from refs.models import Referral, User, db
 
 
 @pytest.fixture(scope="module")
@@ -12,11 +12,8 @@ def new_user():
 
 @pytest.fixture(scope="module")
 def test_client():
-    # Create a test client using the Flask application configured for testing
-    with app.test_client() as testing_client:
-        # Establish an application context
-        with app.app_context():
-            yield testing_client  # this is where the testing happens!
+    client = app.test_client()
+    return client
 
 
 @pytest.fixture(scope="module")
@@ -25,10 +22,11 @@ def init_database(test_client):
     db.create_all()
 
     # Insert user data
-    user1 = User(email="johndoe@example.com", username="johndoe")
-    user2 = User(email="annedoe@example.com", username="annedoe")
-    db.session.add(user1)
-    db.session.add(user2)
+    user = User(email="johndoe@example.com", username="johndoe")
+    db.session.add(user)
+
+    referral = Referral(email="invited_user@example.com", referer=user)
+    db.session.add(referral)
 
     # Commit the changes for the users
     db.session.commit()

@@ -2,10 +2,10 @@ import re
 from typing import Tuple
 
 from flask import request
-from models import Referral, User
 from sqlalchemy import exc
 
 from refs import app, db
+from refs.models import Referral, User
 
 
 # Utils
@@ -16,6 +16,11 @@ def validate_email(email):
 
     else:
         return False
+
+
+@app.route("/", methods=["GET"])
+def index():
+    return "<p>Hello World</p>"
 
 
 @app.route("/v1/create/user", methods=["POST"])
@@ -57,11 +62,19 @@ def create_user():
                         # Award referer user a $10.
                         if int(referer_count) % 5 == 0:
                             referer_user.balance = referer_user.balance + 10
-
                 db.session.commit()
+                data = {
+                    "username": str(user.username),
+                    "current_balance": str(user.balance),
+                    "email": str(user.email),
+                }
+                status = 1
+                message = "User successfully created."
             except exc.IntegrityError as e:
                 errors.append(str(e.orig))
+                message = "Registration failed."
         except KeyError as e:
+            message = "Error: Required key not provided"
             errors.append("A required key " + str(e) + " was not provided.")
 
     return {"message": message, "data": data, "errors": errors, "status": status}
