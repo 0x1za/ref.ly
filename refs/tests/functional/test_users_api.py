@@ -5,7 +5,7 @@ def test_index(test_client):
     assert test_client.get("/").status_code == 200
 
 
-def test_create_users_valid(test_client, init_database):
+def test_create_users_valid(test_client):
     response = test_client.post(
         "/v1/create/user", json={"username": "fibby", "email": "Fibby@example.com"}
     )
@@ -34,3 +34,13 @@ def test_create_user_email_already_exists(test_client):
     assert response.status_code == 200
     assert data["status"] == 0
     assert data["errors"][0] == "UNIQUE constraint failed: user.email"
+
+
+def test_create_user_username_already_exists(test_client):
+    response = test_client.post(
+        "/v1/create/user", json={"username": "johndoe", "email": "example@example.com"}
+    )
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data["status"] == 0
+    assert data["errors"][0] == "UNIQUE constraint failed: user.username"

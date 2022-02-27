@@ -1,7 +1,10 @@
 import pytest
 
-from refs import app
+# fmt: off
+from refs.app import app
 from refs.models import Referral, User, db
+
+# fmt: on
 
 
 @pytest.fixture(scope="module")
