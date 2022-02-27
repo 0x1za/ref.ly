@@ -26,9 +26,9 @@ def init_database(test_client):
 
     # Insert user data
     user = User(email="johndoe@example.com", username="johndoe")
-    db.session.add(user)
 
     referral = Referral(email="invited_user@example.com", referer=user)
+    db.session.add(user)
     db.session.add(referral)
 
     # Commit the changes for the users
