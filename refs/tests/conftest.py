@@ -2,7 +2,7 @@ import pytest
 
 # fmt: off
 from refs.app import app
-from refs.models import User, db
+from refs.models import Referral, User, db
 
 # fmt: on
 
@@ -29,10 +29,12 @@ def init_database(test_client):
 
     db.session.add(user)
     # Commit the changes for the users
-    # db.session.commit()
+    db.session.commit()
 
-    # referral = Referral(email="invited_user@example.com", referer=user)
-    # db.session.add(referral)
+    referral = Referral(
+        email="invited_user@example.com", referer=user, referral_code="0WXOGQI"
+    )
+    db.session.add(referral)
 
     db.session.commit()
 

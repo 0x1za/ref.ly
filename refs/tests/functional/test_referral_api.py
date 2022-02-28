@@ -10,11 +10,30 @@ def test_create_referral_user_doesnt_exist(test_client, init_database):
         "/v1/create/referral",
         json={
             "invitee_email": "jackdoe@example.com",
-            "referer_email": "jogn@example.com",
+            "referer_email": "x234@example.com",
         },
     )
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
     assert data["data"] == {}
-    assert data["errors"][0] == "User with email jogn@example.com does not exist."
+    assert data["errors"][0] == "User with email x234@example.com does not exist."
+    assert data["status"] == 0
+
+
+def test_referral_record_already_exist(test_client, init_database):
+    response = test_client.post(
+        "/v1/create/referral",
+        json={
+            "invitee_email": "invited_user@example.com",
+            "referer_email": "johndoe@example.com",
+        },
+    )
+    data = json.loads(response.get_data(as_text=True))
+    print(data)
+    assert response.status_code == 200
+    assert data["data"] == {}
+    assert (
+        data["errors"][0]
+        == "You have already invited user with email `invited_user@example.com`"
+    )
     assert data["status"] == 0

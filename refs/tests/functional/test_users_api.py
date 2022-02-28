@@ -53,3 +53,18 @@ def test_create_user_username_already_exists(test_client, init_database):
     assert response.status_code == 200
     assert data["status"] == 0
     assert data["errors"][0] == "UNIQUE constraint failed: user.username"
+
+
+def test_create_user_with_referral_code(test_client, init_database):
+    response = test_client.post(
+        "/v1/create/user",
+        json={
+            "username": "johndoe",
+            "email": "x234@example.com",
+            "referral_code": "0WXOGQI",
+        },
+    )
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data["status"] == 0
+    assert data["errors"][0] == "UNIQUE constraint failed: user.username"
