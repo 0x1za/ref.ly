@@ -35,7 +35,6 @@ def init_database(test_client):
         email="invited_user@example.com", referer=user, referral_code="0WXOGQI"
     )
     db.session.add(referral)
-
     db.session.commit()
 
     yield  # this is where the testing happens!

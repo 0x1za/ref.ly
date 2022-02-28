@@ -52,15 +52,13 @@ def create_user():
                         referral = referral.first()
                         user.balance = 10
                         referral.joined = 1
-                        referer_user = User.query.filter_by(
-                            id=referral.referer_id
-                        ).first()
-                        referer_count = Referral.query.filter_by(
-                            referer_id=referral.referer_id, joined=1
-                        ).count()
+                        # referer_user = referral.referer
+                        # referer_count = Referral.query.filter_by(
+                        #     referer_id=referral.referer_id, joined=1
+                        # ).count()
                         # Award referer user a $10.
-                        if int(referer_count) % 5 == 0:
-                            referer_user.balance = referer_user.balance + 10
+                        # if int(referer_count) % 5 == 0:
+                        #     referer_user.balance = referer_user.balance + 10
                 db.session.commit()
                 data = {
                     "username": str(user.username),
@@ -110,17 +108,20 @@ def create_referral():
                         ).count()
                         if refer_exists == 0:
                             # Create a new referral record.
-                            reference = Referral(email=invitee_email, referer=refer)
+                            reference = Referral(
+                                email=invitee_email, referer_id=refer.id
+                            )
+                            db.session.add(reference)
+                            db.session.commit()
+
                             message = "Referral successfully created"
                             data = {
                                 "id": reference.id,
                                 "referral_code": reference.referral_code,
-                                "referer": reference.referer.email,
-                                "invitee": reference.email,
+                                "referer": referer_email,
+                                "invitee": invitee_email,
                             }
                             status = 1
-                            db.session.add(reference)
-                            db.session.commit()
                         else:
                             errors.append(
                                 "You have already invited user with email `"

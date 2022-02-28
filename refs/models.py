@@ -14,6 +14,7 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     balance = db.Column(db.Integer, default=0, nullable=False)
+    referrals = db.relationship("Referral", backref=db.backref("user", lazy=True))
 
     def __repr__(self):
         return "<User %r>" % self.username
@@ -23,7 +24,6 @@ class Referral(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(120), nullable=False)
     referer_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    referer = db.relationship("User", backref=db.backref("users", lazy=True))
     referral_code = db.Column(
         db.String(60), unique=True, nullable=False, default=secrets.token_urlsafe(8)
     )
