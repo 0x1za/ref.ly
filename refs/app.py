@@ -103,6 +103,7 @@ def create_referral():
                     # Get referer id.
                     refer = User.query.filter_by(email=referer_email).first()
                     invitee = User.query.filter_by(email=invitee_email).count()
+
                     if refer is not None and invitee != 1:
                         refer_exists = Referral.query.filter_by(
                             referer_id=refer.id, email=invitee_email
@@ -110,9 +111,6 @@ def create_referral():
                         if refer_exists == 0:
                             # Create a new referral record.
                             reference = Referral(email=invitee_email, referer=refer)
-                            db.session.add(reference)
-                            db.session.commit()
-
                             message = "Referral successfully created"
                             data = {
                                 "id": reference.id,
@@ -121,6 +119,8 @@ def create_referral():
                                 "invitee": reference.email,
                             }
                             status = 1
+                            db.session.add(reference)
+                            db.session.commit()
                         else:
                             errors.append(
                                 "You have already invited user with email `"
@@ -133,11 +133,15 @@ def create_referral():
                         # user already exists.
                         if refer is None:
                             errors.append(
-                                "User with email " + str(refer) + " does not exist."
+                                "User with email "
+                                + str(referer_email)
+                                + " does not exist."
                             )
                         elif invitee == 1:
                             errors.append(
-                                "User with email " + str(refer) + " already exists."
+                                "User with email "
+                                + str(referer_email)
+                                + " already exists."
                             )
                 else:
                     if not valid_emails[0]:
@@ -155,8 +159,11 @@ def create_referral():
                     message = "ValidationError"
             else:
                 errors += ["You cannot send a referral to yourself."]
-            status = 1
         except KeyError as e:
             errors.append("A required key " + str(e) + " was not provided.")
 
     return {"message": message, "data": data, "errors": errors, "status": status}
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
