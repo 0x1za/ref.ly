@@ -40,25 +40,29 @@ def create_user():
             referral_code = response.get("referral_code", None)
 
             try:
-                user = User(username=username, email=email)
+                user = User(username=username, email=email, balance=0)
                 # Check if reference code exists.
-                db.session.add(user)
                 if referral_code is not None:
                     referral = Referral.query.filter_by(
-                        referral_code=str(referral_code), email=email
+                        referral_code=str(referral_code), email=email, joined=False
                     )
+                    db.session.add(user)
                     if referral.count() == 1:
+                        print("here")
+                        referral_record = referral.first()
+                        referer_user = User.query.filter_by(
+                            id=referral_record.referer_id
+                        ).first()
                         # Assign a $10 to invitee user account.
-                        referral = referral.first()
                         user.balance = 10
-                        referral.joined = 1
-                        # referer_user = referral.referer
-                        # referer_count = Referral.query.filter_by(
-                        #     referer_id=referral.referer_id, joined=1
-                        # ).count()
+                        referral_record.joined = True
+                        db.session.add(referral_record)
                         # Award referer user a $10.
-                        # if int(referer_count) % 5 == 0:
-                        #     referer_user.balance = referer_user.balance + 10
+                        if int(referral.count()) % 5 == 0:
+                            referer_user.balance = referer_user.balance + 10
+                else:
+                    db.session.add(user)
+
                 db.session.commit()
                 data = {
                     "username": str(user.username),

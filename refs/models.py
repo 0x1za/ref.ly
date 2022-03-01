@@ -1,12 +1,11 @@
-import secrets
+import random
+import string
 
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
+from refs import db
 
-from refs import app
 
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+def random_code():
+    return "".join(random.choices(string.ascii_uppercase + string.digits, k=8))
 
 
 class User(db.Model):
@@ -25,9 +24,9 @@ class Referral(db.Model):
     email = db.Column(db.String(120), nullable=False)
     referer_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     referral_code = db.Column(
-        db.String(60), unique=True, nullable=False, default=secrets.token_urlsafe(8)
+        db.String(60), unique=True, nullable=False, default=random_code
     )
     joined = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
-        return "<Referral %r>" % str(self.email + "/" + self.referer.email)
+        return "<Referral %r>" % str(self.email)

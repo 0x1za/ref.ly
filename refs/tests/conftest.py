@@ -20,7 +20,7 @@ def test_client():
 
 
 @pytest.fixture(scope="module")
-def init_database(test_client):
+def init_database():
     # Create the database and the database table
     db.create_all()
 
@@ -32,7 +32,7 @@ def init_database(test_client):
     db.session.commit()
 
     referral = Referral(
-        email="invited_user@example.com", referer=user, referral_code="0WXOGQI"
+        email="invited_user@example.com", referer_id=user.id, referral_code="0WXOGQI"
     )
     db.session.add(referral)
     db.session.commit()
