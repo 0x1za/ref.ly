@@ -28,6 +28,7 @@ def create_user():
     data = {}
     status = 0
     message = ""
+    code = 400  # Default is bad request
 
     # Check if data is set or provided in request.
     if request.data:
@@ -48,7 +49,6 @@ def create_user():
                     )
                     db.session.add(user)
                     if referral.count() == 1:
-                        print("here")
                         referral_record = referral.first()
                         referer_user = User.query.filter_by(
                             id=referral_record.referer_id
@@ -62,13 +62,13 @@ def create_user():
                             referer_user.balance = referer_user.balance + 10
                 else:
                     db.session.add(user)
-
                 db.session.commit()
                 data = {
                     "username": str(user.username),
                     "current_balance": str(user.balance),
                     "email": str(user.email),
                 }
+                code = 201
                 status = 1
                 message = "User successfully created."
             except exc.IntegrityError as e:
@@ -78,7 +78,13 @@ def create_user():
             message = "Error: Required key not provided"
             errors.append("A required key " + str(e) + " was not provided.")
 
-    return {"message": message, "data": data, "errors": errors, "status": status}
+    return {
+        "message": message,
+        "data": data,
+        "errors": errors,
+        "status": status,
+        "code": str(code),
+    }
 
 
 @app.route("/v1/create/referral", methods=["POST"])
@@ -87,6 +93,7 @@ def create_referral():
     data = {}
     status = 0
     message = ""
+    code = 400  # Default is bad request
 
     # Check if data is set or provided in request.
     if request.data:
@@ -125,6 +132,7 @@ def create_referral():
                                 "referer": referer_email,
                                 "invitee": invitee_email,
                             }
+                            code = 201
                             status = 1
                         else:
                             errors.append(
@@ -167,4 +175,10 @@ def create_referral():
         except KeyError as e:
             errors.append("A required key " + str(e) + " was not provided.")
 
-    return {"message": message, "data": data, "errors": errors, "status": status}
+    return {
+        "message": message,
+        "data": data,
+        "errors": errors,
+        "status": status,
+        "code": str(code),
+    }
