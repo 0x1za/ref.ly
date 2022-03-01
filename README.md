@@ -11,32 +11,115 @@
 
 > rf.ly is a referral & rewards management service for Amitree.
 
-### 🏠 [Homepage](rf.ly)
+### Installation
 
-### ✨ [Demo](github.com/0z1za/rf.ly)
-
-## Install & activate virtual env
+Pull source code from this GitHub repository:
 
 ```sh
->> pipenv install
->> pipenv shell
+$ git clone git@github.com:0x1za/ref.ly.git
 ```
 
-## Usage
+Create pipenv environment & install packages:
+
+```sh
+$ cd ref.ly/
+$ pip install pipenv
+$ pipenv install
+```
+
+Activate the virtual environment:
+
+```sh
+$ pipenv shell
+```
+
+### Database Initialization
+
+This Flask application needs a SQLite database to store data. `Flask-Migrate` is used to manage database initialization and migrations
+
+```
+(rf.ly) $ flask db init
+(rf.ly) $ flask db migrate -m "Initial migration."
+(rf.ly) $ flask db upgrade
+```
+
+
+### Usage
+Set the file that contains the Flask application and specify that the development environment should be used:
+
+```sh
+(venv) $ export FLASK_APP=app.py
+(venv) $ export FLASK_ENV=development
+```
+
 ```sh
 FLASK_APP=refs.py FLASK_ENV=development flask run
 ```
 
-## Author
+### API Reference
+
+**Create Referral**
+```http
+POST /v1/create/referral
+```
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `invitee_email` | `string` | **Required**. User to be invited |
+| `referer_email` | `string` | **Required**. Email of referer (person creating the referral.) |
+
+**Create User**
+```http
+POST /v1/create/user
+```
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `email` | `string` | **Required**. User email |
+| `username` | `string` | **Required**. Unique username |
+| `referral_code` | `string` | Referral code, *submit empty string if None* |
+
+#### Responses
+
+Many API endpoints return the JSON representation of the resources created or edited. However, if an invalid request is submitted, or some other error occurs, `rf.ly` returns a JSON response in the following format:
+
+```javascript
+{
+  "message" : string,
+  "success" : bool,
+  "data"    : string
+  "status"  : string
+}
+```
+
+The `message` attribute contains a message commonly used to indicate errors or, in the case of deleting a resource, success that the resource was properly deleted.
+
+The `success` attribute describes if the transaction was successful or not.
+
+The `data` attribute contains any other metadata associated with the response. This will be an escaped string containing JSON data.
+
+#### Status Codes
+
+rf.ly returns the following status codes in its API:
+
+| Status Code | Description |
+| :--- | :--- |
+| 200 | `OK` |
+| 201 | `CREATED` |
+| 400 | `BAD REQUEST` |
+| 404 | `NOT FOUND` |
+| 500 | `INTERNAL SERVER ERROR` |
+
+### Author
 
 👤 **Mwiza Simbeye**
 
 * Github: [@0x1za](https://github.com/0x1za)
 
-## 🤝 Contributing
+### 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/0x1za/ref.ly/issues).
 
-## Show your support
+### Show your support
 
 Give a ⭐️ if this project helped you!
