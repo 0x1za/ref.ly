@@ -153,7 +153,7 @@ def create_referral():
                         errors.append(
                             "invitee_email: "
                             + str(invitee_email)
-                            + "` is not a valid email."
+                            + " is not a valid email."
                         )
                     elif not valid_emails[1]:
                         errors.append(
