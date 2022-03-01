@@ -168,7 +168,3 @@ def create_referral():
             errors.append("A required key " + str(e) + " was not provided.")
 
     return {"message": message, "data": data, "errors": errors, "status": status}
-
-
-if __name__ == "__main__":
-    app.run(debug=True)

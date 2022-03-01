@@ -26,8 +26,10 @@ def init_database():
 
     # Insert user data
     user = User(email="johndoe@example.com", username="johndoe")
+    user2 = User(email="janedoe@example.com", username="janedoe")
 
     db.session.add(user)
+    db.session.add(user2)
     # Commit the changes for the users
     db.session.commit()
 

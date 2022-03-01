@@ -76,5 +76,63 @@ def test_create_referral_invalid_invitee(test_client, init_database):
     )
     data = json.loads(response.get_data(as_text=True))
     assert response.status_code == 200
-    assert data["errors"][0] == "You cannot send a referral to yourself."
+    assert data["errors"][0] == "invitee_email: invalid.com is not a valid email."
+    assert data["status"] == 0
+
+
+def test_create_referral_invalid_email_referer(test_client, init_database):
+    response = test_client.post(
+        "/v1/create/referral",
+        json={
+            "invitee_email": "joe@valid.com",
+            "referer_email": "johndoe-invalid.com",
+        },
+    )
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert (
+        data["errors"][0] == "referer_email: johndoe-invalid.com is not a valid email."
+    )
+    assert data["status"] == 0
+
+
+def test_create_referral_user_already_exists(test_client, init_database):
+    response = test_client.post(
+        "/v1/create/referral",
+        json={
+            "invitee_email": "janedoe@example.com",
+            "referer_email": "johndoe@example.com",
+        },
+    )
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data["errors"][0] == "User with email johndoe@example.com already exists."
+    assert data["status"] == 0
+
+
+def test_create_referral_user_invalid_payload_invitee(test_client, init_database):
+    response = test_client.post(
+        "/v1/create/referral",
+        json={
+            "x": "janedoe@example.com",
+            "referer_email": "johndoe@example.com",
+        },
+    )
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data["errors"][0] == "A required key 'invitee_email' was not provided."
+    assert data["status"] == 0
+
+
+def test_create_referral_user_invalid_payload_referer(test_client, init_database):
+    response = test_client.post(
+        "/v1/create/referral",
+        json={
+            "invitee_email": "janedoe@example.com",
+            "y": "johndoe@example.com",
+        },
+    )
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data["errors"][0] == "A required key 'referer_email' was not provided."
     assert data["status"] == 0
