@@ -3,9 +3,18 @@ from typing import Tuple
 
 from flask import request
 from sqlalchemy import exc
+from sqlalchemy.orm import class_mapper
 
 from refs import app, db
 from refs.models import Referral, User
+
+
+def serialize(model):
+    """Transforms a model into a dictionary which can be dumped to JSON."""
+    # first we get the names of all the columns on your model
+    columns = [c.key for c in class_mapper(model.__class__).columns]
+    # then we return their values in a dict
+    return dict((c, getattr(model, c)) for c in columns)
 
 
 # Utils
@@ -17,16 +26,31 @@ def validate_email(email):
         return False
 
 
-@app.route("/", methods=["GET"])
-def index():
+@app.route("/v1/users", methods=["GET"])
+def get_users():
+    errors = []
 
-    return "<p>rf.ly - API</p>"
+    user_id = request.args.get("id", "")
+    query = User.query.all()
+    if user_id:
+        query = User.query.filter_by(id=user_id)
+    serialized_users = [serialize(user) for user in query]
 
+    status = 1 if len(serialized_users) > 0 else 0
+    code = 200 if len(serialized_users) > 0 else 404
+    errors = (
+        []
+        if len(serialized_users) > 0
+        else ["User with id {} was not found.".format(user_id)]
+    )
 
-@app.route("/v1/referrals", methods=["GET"])
-def get_referrals():
-
-    return "Hello"
+    return {
+        "message": "Query results: " + str(len(serialized_users)) + " records",
+        "data": serialized_users,
+        "errors": errors,
+        "status": status,
+        "code": str(code),
+    }
 
 
 @app.route("/v1/create/user", methods=["POST"])
