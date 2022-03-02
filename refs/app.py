@@ -19,7 +19,8 @@ def validate_email(email):
 
 @app.route("/", methods=["GET"])
 def index():
-    return "<p>Hello World</p>"
+
+    return "<p>rf.ly - API</p>"
 
 
 @app.route("/v1/referrals", methods=["GET"])
