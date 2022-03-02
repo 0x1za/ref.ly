@@ -26,6 +26,11 @@ def validate_email(email):
         return False
 
 
+@app.route("/", methods=["GET"])
+def index():
+    return "<p>Welcome to ref.ly</p>"
+
+
 @app.route("/v1/users", methods=["GET"])
 def get_users():
     errors = []
