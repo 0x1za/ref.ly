@@ -10,6 +10,7 @@ flake8 = "*"
 coverage = "*"
 flask-migrate = "*"
 pytest-cov = "*"
+gunicorn = "*"
 
 [dev-packages]
 

@@ -22,6 +22,12 @@ def index():
     return "<p>Hello World</p>"
 
 
+@app.route("/v1/referrals", methods=["GET"])
+def get_referrals():
+
+    return "Hello"
+
+
 @app.route("/v1/create/user", methods=["POST"])
 def create_user():
     errors = []
