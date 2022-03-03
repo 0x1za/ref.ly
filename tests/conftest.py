@@ -1,8 +1,8 @@
 import pytest
 
 # fmt: off
-from refs.app import app
-from refs.models import Referral, User, db
+from refs import create_app, db
+from refs.models import Referral, User
 
 # fmt: on
 
@@ -15,12 +15,20 @@ def new_user():
 
 @pytest.fixture(scope="module")
 def test_client():
-    client = app.test_client()
-    return client
+    app = create_app("flask_test.cfg")
+    app.app_context().push()
+
+    # Create a test client using the Flask application configured for testing
+    with app.test_client() as testing_client:
+        # Establish an application context
+        with app.app_context():
+            yield testing_client  # this is where the testing happens!
+
+    return app.test_client()
 
 
 @pytest.fixture(scope="module")
-def init_database():
+def init_database(test_client):
     # Create the database and the database table
     db.create_all()
 

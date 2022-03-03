@@ -1,4 +1,4 @@
-from refs.app import validate_email
+from refs.utils import validate_email
 
 
 def test_invalid_email():
