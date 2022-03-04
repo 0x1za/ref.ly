@@ -7,13 +7,13 @@ from refs.models import Referral, User
 # fmt: on
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def new_user():
     user = User(email="annedoe@example.com", username="annedoe")
     return user
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def test_client():
     app = create_app("flask_test.cfg")
     app.app_context().push()
@@ -27,7 +27,7 @@ def test_client():
     return app.test_client()
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def init_database(test_client):
     # Create the database and the database table
     db.create_all()
@@ -48,5 +48,5 @@ def init_database(test_client):
     db.session.commit()
 
     yield  # this is where the testing happens!
-
+    db.session.rollback()
     db.drop_all()

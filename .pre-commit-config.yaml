@@ -10,10 +10,10 @@ repos:
     rev: 21.12b0
     hooks:
     -   id: black
--   repo: https://github.com/timothycrosley/isort
-    rev: 4.3.21
-    hooks:
-    -   id: isort
+#-   repo: https://github.com/timothycrosley/isort
+#    rev: 4.3.21
+#    hooks:
+#    -   id: isort
 -   repo: https://github.com/MarcoGorelli/absolufy-imports
     rev: v0.3.0
     hooks:

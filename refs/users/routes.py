@@ -3,7 +3,10 @@ from sqlalchemy import exc
 
 from refs import db
 from refs.models import Referral, User
+
+# fmt: off
 from refs.users import users_blueprint
+# fmt: on
 from refs.utils import serialize
 
 
@@ -88,6 +91,7 @@ def create_user():
                 message = "User successfully created."
             except exc.IntegrityError as e:
                 errors.append(str(e.orig))
+                db.session.rollback()
                 message = "Registration failed."
         except KeyError as e:
             message = "Error: Required key not provided"

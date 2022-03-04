@@ -4,8 +4,12 @@ from flask import request
 
 from refs import db
 from refs.models import Referral, User
+
+# fmt: off
 from refs.referrals import referrals_blueprint
 from refs.utils import validate_email
+
+# fmt: on
 
 
 @referrals_blueprint.route("/v1/create/referral", methods=["POST"])
