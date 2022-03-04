@@ -10,7 +10,8 @@
 
 
 > rf.ly is a referral & rewards management service for Amitree.
-
+### Demo
+https://rfly.herokuapp.com/
 ### Installation
 
 Pull source code from this GitHub repository:
