@@ -48,8 +48,8 @@ This Flask application needs a SQLite database to store data. `Flask-Migrate` is
 Set the file that contains the Flask application and specify that the development environment should be used:
 
 ```sh
-(venv) $ export FLASK_APP=app.py
-(venv) $ export FLASK_ENV=development
+(rf.ly) $ export FLASK_APP=app.py
+(rf.ly) $ export FLASK_ENV=development
 ```
 
 ```sh

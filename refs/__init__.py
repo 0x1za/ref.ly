@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
@@ -9,6 +10,7 @@ def create_app(config_filename=None):
     app.config.from_pyfile(config_filename)
     initialize_extensions(app)
     register_blueprints(app)
+    Migrate(app, db)
     return app
 
 
