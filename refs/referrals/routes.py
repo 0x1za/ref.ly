@@ -5,11 +5,43 @@ from flask import request
 from refs import db
 from refs.models import Referral, User
 
-# fmt: off
 from refs.referrals import referrals_blueprint
+from refs.utils import serialize
 from refs.utils import validate_email
 
-# fmt: on
+
+@referrals_blueprint.route("/v1/referrals", methods=["GET"])
+def get_users():
+    message = ""
+    field = ""
+    user_id = request.args.get("id", "")
+    referral_code = request.args.get("referral_code", "")
+
+    query = Referral.query.all()
+    if user_id:
+        query = Referral.query.filter_by(id=user_id)
+        field = "id"
+    elif referral_code:
+        query = Referral.query.filter_by(referral_code=referral_code)
+        field = "referral_code"
+    serialized_referrals = [serialize(user) for user in query]
+
+    message = (
+        "Referral with {} {} was not found.".format(field, user_id or referral_code)
+        if user_id or referral_code
+        else []
+    )
+    status = 1 if len(serialized_referrals) > 0 else 0
+    code = 200 if len(serialized_referrals) > 0 else 404
+    errors = [] if len(serialized_referrals) > 0 else [message]
+
+    return {
+        "message": "Query results: " + str(len(serialized_referrals)) + " records",
+        "data": serialized_referrals,
+        "errors": errors,
+        "status": status,
+        "code": str(code),
+    }
 
 
 @referrals_blueprint.route("/v1/create/referral", methods=["POST"])
