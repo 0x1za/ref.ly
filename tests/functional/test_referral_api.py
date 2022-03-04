@@ -5,6 +5,33 @@ def test_index(test_client):
     assert test_client.get("/").status_code == 200
 
 
+def test_get_all_referrals(test_client, init_database):
+    response = test_client.get("/v1/referrals")
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data["errors"] == []
+    assert data["status"] == 1
+    assert data["message"] == "Query results: 1 records"
+
+
+def test_get_one_referral_with_id(test_client, init_database):
+    response = test_client.get("/v1/referrals?id=1")
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data["errors"] == []
+    assert data["status"] == 1
+    assert data["message"] == "Query results: 1 records"
+
+
+def test_get_one_referral_with_referral_code(test_client, init_database):
+    response = test_client.get("/v1/referrals?referral_code=0WXOGQI")
+    data = json.loads(response.get_data(as_text=True))
+    assert response.status_code == 200
+    assert data["errors"] == []
+    assert data["status"] == 1
+    assert data["message"] == "Query results: 1 records"
+
+
 def test_create_referral_user_doesnt_exist(test_client, init_database):
     response = test_client.post(
         "/v1/create/referral",
