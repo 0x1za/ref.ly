@@ -12,7 +12,6 @@ from refs.utils import validate_email
 
 @referrals_blueprint.route("/v1/referrals", methods=["GET"])
 def get_users():
-    message = ""
     field = ""
     user_id = request.args.get("id", "")
     referral_code = request.args.get("referral_code", "")
