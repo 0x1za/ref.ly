@@ -58,16 +58,6 @@ FLASK_APP=refs.py FLASK_ENV=development flask run
 
 ### API Reference
 
-**Create Referral**
-```http
-POST /v1/create/referral
-```
-
-| Parameter | Type | Description |
-| :--- | :--- | :--- |
-| `invitee_email` | `string` | **Required**. User to be invited |
-| `referer_email` | `string` | **Required**. Email of referer (person creating the referral.) |
-
 **Create User**
 ```http
 POST /v1/create/user
@@ -78,6 +68,47 @@ POST /v1/create/user
 | `email` | `string` | **Required**. User email |
 | `username` | `string` | **Required**. Unique username |
 | `referral_code` | `string` | Referral code, *submit empty string if None* |
+
+
+**Get User(s)**
+
+Get all users in database
+```http
+GET /v1/users
+```
+
+Get user by ID
+```http
+POST /v1/users?id=1
+```
+
+**Create Referral**
+```http
+POST /v1/create/referral
+```
+
+| Parameter | Type | Description |
+| :--- | :--- | :--- |
+| `invitee_email` | `string` | **Required**. User to be invited |
+| `referer_email` | `string` | **Required**. Email of referer (person creating the referral.) |
+
+
+**Get Referrals(s)**
+
+Get all referrals in database
+```http
+GET /v1/referrals
+```
+
+Get referral by ID
+```http
+GET /v1/referrals?id=1
+```
+
+Get referral by referral code.
+```http
+GET /v1/referrals?referral_code=4034W
+```
 
 #### Responses
 
